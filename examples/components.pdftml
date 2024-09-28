@@ -1,0 +1,12 @@
+component engine <mtbf, mttr> {
+	parameters {
+		mtbf = 1000;
+		mttr = 10;
+	}
+	states: up, down;
+	outport: failure {true, false};
+	transitions {
+		down [{exp(mttr)}] --> up / false;
+		up [(temperature > 100) or {exp(mtbf)}] --> down / true;
+	}
+}

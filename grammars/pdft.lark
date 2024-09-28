@@ -1,0 +1,119 @@
+start: block*
+
+block:  dynamic_block
+    | component_block
+    | model_block
+
+dynamic_block: "dynamics" "{" dynamics "}"
+
+dynamics: [ dynamic_name ("," dynamic_name)* ]
+
+component_block: "component" component_name [bindings] "{" (component_stmt)* "}"
+
+bindings: "<" binding_name ("," binding_name)* ">"
+
+component_stmt: parameter_stmt
+    | state_stmt
+    | inport_stmt
+    | outport_stmt
+    | transition_stmt
+
+parameter_stmt: "parameters" "{" parameter_assign* "}"
+
+parameter_assign: parameter_name "=" parameter_value ";"
+
+state_stmt: "states" ":" state_name ("," state_name)* ";"
+
+inport_stmt: "inports" "{" (inports)*  "}"
+
+inports: inport_name "{" inport_value ("," inport_value)*  "}" ";"
+
+outport_stmt: "outport" ":" outport_name "{" outport_value ("," outport_value)*  "}" ";"
+
+transition_stmt: "transitions" "{" transition* "}"
+
+transition: from_name trigger? "-->" to_name action? ";"
+
+trigger: "[" condition "]"
+
+condition: simplecondition
+    | "(" condition ")"
+    | condition binary_operator condition
+    | unary_operator condition
+
+simplecondition: lvalue comp_op rvalue
+     | "{" distribution "(" parameter_name ")" "}"
+
+binary_operator: and_operator
+    | or_operator
+
+unary_operator: not_operator
+
+not_operator: "not"
+
+and_operator: "and"
+
+or_operator: "or"
+
+from_name: state_name
+
+to_name: state_name
+
+distribution: "exp"
+
+comp_op: "<" | ">" | "<=" | ">=" | "==" | "!="
+
+action: "/" outport_value
+
+model_block: "model" model_name "{" (model_stmt)* "}"
+
+model_stmt: parameter_stmt
+    | dynamic_stmt
+    | object_stmt
+    | event_stmt
+    | cost_stmt
+
+dynamic_stmt: "dynamics" ":" dynamic_name ("," dynamic_name)* ";"
+
+object_stmt: component_name instance_name actual_binding? ";"
+
+actual_binding: "<" binding_value ("," binding_value)* ">"
+
+event_stmt: from_port "->" to_port weight? ";"
+
+from_port: instance_name "." outport_name
+
+to_port: instance_name "." outport_name
+
+weight: "(" probability ")"
+
+cost_stmt: "cost" "{" (cost_item)* "}"
+
+cost_item: condition ":" cost_value ";"
+
+cost_value: STRING | NUMBER
+
+binding_value: STRING | NUMBER
+instance_name: STRING
+probability: NUMBER
+lvalue: STRING | NUMBER
+rvalue: STRING | NUMBER
+outport_value: STRING
+outport_name: STRING
+inport_value: STRING
+inport_name: STRING
+state_name: STRING
+parameter_name: STRING
+parameter_value: NUMBER
+model_name: STRING
+binding_name: STRING
+component_name: STRING
+dynamic_name: STRING
+
+STRING: /[_a-zA-Z][_a-zA-Z0-9\/]*/
+NUMBER: INTEGER | DECIMAL
+INTEGER : /[0-9]+/
+DECIMAL: INTEGER? "." INTEGER  //# Will be matched before INTEGER
+
+%import common.WS
+%ignore WS

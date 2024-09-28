@@ -17,15 +17,15 @@ component engine <mtbf, mttr> {
 
 component train {
 	states: up, failing, down;
-	outports: failure {true, false};
+	outport: failure {true, false};
 	inports {
 		input1 {true, false};
 		input2 {true, false};
 	}
 	transitions {
 		up [(input1 == true) or (input2 == true)] --> failing;
-		failing [(input1 == true) or (input2 == true)] --> down / false;
-		down [(input1 == false) and (input2 == false)] --> up / true;
+		failing [(input1 == true) or (input2 == true)] --> down / true;
+		down [(input1 == false) and (input2 == false)] --> up / false;
 	}
 }
 
@@ -33,17 +33,18 @@ component train {
 model train {
 	parameters {
 		cost_of_an_engine = 1000;
+		cost_of_an_engine_max = 100000;
 	}
+	dynamics: temperature;
 	engine E1<100,10>;
 	engine E2<None,None>;
 	train top;
 	E1.failure -> top.input1 (1);
-	E2.failure -> top.input2 (1);
-	
+	E2.failure -> top.input2;
 	cost {
-		top == up: 0,
-		top == failing: cost_of_an_engine,
-		top == down: cost_of_an_engine * cost_of_an_engine,
+		top == up: 0;
+		top == failing: cost_of_an_engine;
+		top == down: cost_of_an_engine_max;
 	}	
 }
 

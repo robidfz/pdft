@@ -1,16 +1,17 @@
-# This is a sample Python script.
+from src.pdftml import just_parse
+from src.utils import get_content
 
-# Press Maiusc+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+grammar_filename = 'grammars/pdft.lark'
 
+examples = {
+    'dynamics': 'examples/dynamics.pdftml',
+    'component': 'examples/components.pdftml',
+    'full': 'examples/full.pdftml'
+}
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    grammar = get_content(grammar_filename)
+    for example_name in examples.keys():
+        example = get_content(examples[example_name])
+        result = just_parse(grammar,example)
+        print(example_name + ' -> ' + str(result) + '\n')
