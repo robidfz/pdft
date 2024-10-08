@@ -32,7 +32,7 @@ outport_stmt: "outport" ":" outport_name "{" outport_value ("," outport_value)* 
 
 transition_stmt: "transitions" "{" transition* "}"
 
-transition: from_name trigger? "-->" to_name action? ";"
+transition: from_name trigger? "-->" to_name action? weight?";"
 
 trigger: "[" condition "]"
 
@@ -85,7 +85,7 @@ from_port: instance_name "." outport_name
 
 to_port: instance_name "." outport_name
 
-weight: "(" probability ")"
+weight: "(" likelihood ")"
 
 cost_stmt: "cost" "{" (cost_item)* "}"
 
@@ -95,7 +95,7 @@ cost_value: STRING | NUMBER
 
 binding_value: STRING | NUMBER
 instance_name: STRING
-probability: NUMBER
+likelihood: NUMBER
 lvalue: STRING | NUMBER
 rvalue: STRING | NUMBER
 outport_value: STRING

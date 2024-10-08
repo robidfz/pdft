@@ -10,7 +10,7 @@ component engine <mtbf, mttr> {
 	states: up, down;
 	outport: failure {true, false};
 	transitions {
-		up [(temperature > 100) or {exp(mtbf)}] --> down / true;
+		up [(temperature > 100) or {exp(mtbf)}] --> down / true (0.4);
 		down [{exp(mttr)}] --> up / false;
 	}
 }
@@ -39,7 +39,7 @@ model train {
 	engine E1<100,10>;
 	engine E2<None,None>;
 	train top;
-	E1.failure -> top.input1 (1);
+	E1.failure -> top.input1 (0.2);
 	E2.failure -> top.input2;
 	cost {
 		top == up: 0;
