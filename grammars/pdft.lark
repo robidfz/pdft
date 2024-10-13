@@ -32,7 +32,7 @@ outport_stmt: "outport" ":" outport_name "{" outport_value ("," outport_value)* 
 
 transition_stmt: "transitions" "{" transition* "}"
 
-transition: from_name trigger? "-->" to_name action? weight?";"
+transition: from_name trigger? "-" weight? "->" to_name action? ";"
 
 trigger: "[" condition "]"
 
@@ -79,7 +79,7 @@ object_stmt: component_name instance_name actual_binding? ";"
 
 actual_binding: "<" binding_value ("," binding_value)* ">"
 
-event_stmt: from_port "->" to_port weight? ";"
+event_stmt: from_port "-" weight? "->" to_port ";"
 
 from_port: instance_name "." outport_name
 
