@@ -3,28 +3,28 @@ from pprint import pprint
 from lark import Token
 from lark.visitors import Visitor_Recursive
 
+from src.pdft.errors import PdfErrorKind, PdftError
+from src.pdft.visitors import PdftVisitor
 
-class PdftValidator(Visitor_Recursive):
+
+class PdftValidator(PdftVisitor):
 
     def __init__(self):
-        self.functions = {
-            'dynamic_name': self.collect
-        }
-        self.dynamics = list()
+        super().__init__()
+        self.checks = [(self.check_dynamics,PdfErrorKind.DuplicatedDynamic)]
 
-    def pprint(self):
-        print(f'Dynamics -> {self.dynamics}')
+    def validate(self) -> PdftError:
+        error: PdftError = None
+        counter: int = 0
+        while not error and (counter < len(self.checks)):
+            check, candidate_error = self.checks[counter]
+            error = check()
+            counter += 1
+        return error
 
-
-    def _call_userfunc(self, tree):
-        payload: Token = tree.data
-        kind = payload.value
-        if kind in self.functions.keys():
-            function = self.functions[kind]
-            child = tree.children[0]
-            function(child.value)
-        return None
-
-    def collect(self, value):
-        self.dynamics.append(value)
-
+    def check_dynamics(self) -> bool:
+        temporary_set = set(self.dynamics)
+        error = None
+        if len(temporary_set) != len(self.dynamics):
+            error = PdfErrorKind.DuplicatedDynamic
+        return error

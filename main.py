@@ -1,5 +1,7 @@
+from src.pdft.errors import PdftError
 from src.pdft.parsers import PdftParser
 from src.pdft.validators import PdftValidator
+from src.pdft.visitors import PdftVisitor
 from src.utils import get_content
 
 grammar_filename = 'grammars/pdft.lark'
@@ -19,3 +21,5 @@ if __name__ == '__main__':
         validator: PdftValidator = PdftValidator()
         validator.visit(tree)
         validator.pprint()
+        error: PdftError = validator.validate()
+        print(error)
