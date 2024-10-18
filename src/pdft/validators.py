@@ -13,8 +13,7 @@ class PdftValidator(Visitor_Recursive):
         self.dynamics = list()
 
     def pprint(self):
-        print('Dynamics\n')
-        pprint(self.dynamics)
+        print(f'Dynamics -> {self.dynamics}')
 
 
     def _call_userfunc(self, tree):
