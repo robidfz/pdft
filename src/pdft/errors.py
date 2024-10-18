@@ -2,8 +2,10 @@ from enum import Enum
 
 class PdfErrorKind(Enum):
     DuplicatedDynamic = 1
-    DuplicatedComponent = 2
-    DuplicatedPort = 3
+    UndefinedDynamic = 2
+    DuplicatedComponent = 3
+    UndefinedComponent = 4
+    UndefinedInstance = 5
 
 
 class PdftError(Exception):

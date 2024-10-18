@@ -25,10 +25,10 @@ The following checks are performed on a parsed file:
   * [ ] the action of a transition is a value in {true, false, neutral}.
 * **model**: 
   * [ ] the names of the parameters are unique;
-  * [ ] the names of the dynamics are present in dynamics section;
+  * [x] the names of the dynamics are present in dynamics section;
   * [ ] the names of the component instances are unique;
-  * [ ] the component of a component instance is in the list of the component;
-  * [ ] the list of parameter bindings is of the same lenght of the component's parameter bindings;
+  * [x] the component of a component instance is in the list of the component;
+  * [ ] the list of parameter bindings is of the same length of the component's parameter bindings;
   * [ ] each event starts from a component instance with a legal state;
   * [ ] each event ends to a component instance with a legal state;
   * [ ] the weight of an event is a number between 0 and 1;
@@ -43,4 +43,5 @@ The following checks are performed on a parsed file:
 * Stefano Marrone, Università della Campania "Luigi Vanvitelli"
 * Roberta De Fazio, Università della Campania "Luigi Vanvitelli"
 
+## Cite me!
 
