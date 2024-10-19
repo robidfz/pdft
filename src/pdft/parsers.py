@@ -7,7 +7,7 @@ class PdftParser:
         self.parser: Lark = Lark(pdft_grammar, parser='lalr')
 
     def parse(self, pdft_model):
-        retval = None
+        tree = None
         try:
             tree = self.parser.parse(pdft_model)
         except Exception:
