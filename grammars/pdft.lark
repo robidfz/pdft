@@ -121,7 +121,7 @@ dynamic_name_use: STRING
 STRING: /[_a-zA-Z][_a-zA-Z0-9\/]*/
 NUMBER: INTEGER | DECIMAL
 INTEGER : /[0-9]+/
-DECIMAL: INTEGER? "." INTEGER  //# Will be matched before INTEGER
+DECIMAL: INTEGER? "." INTEGER
 
 %import common.WS
 %ignore WS
