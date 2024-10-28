@@ -1,6 +1,10 @@
 # The Predictive Fault Tree Language
 
 ## Motivation
+This repository contains the material related to the preactical implementation of the Predictive Fault Tree 
+formalism.
+
+
 
 ## Definition of the language
 
@@ -44,4 +48,5 @@ The following checks are performed on a parsed file:
 * Roberta De Fazio, Università della Campania "Luigi Vanvitelli"
 
 ## Cite me!
+De Fazio, R., Marrone, S., Verde, L., Reccia, V. and Valletta, P., 2024. Towards an extension of Fault Trees in the Predictive Maintenance Scenario. arXiv preprint arXiv:2403.13785.
 
