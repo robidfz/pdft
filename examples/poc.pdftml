@@ -2,64 +2,87 @@ dynamics {
 	sigA, sigB, sigC
 }
 
-
-
-
-
-
-
-
-
-
-component simple {
+component simpleC1 {
 	states: up, down;
 	outport: failure {true, false};
 	transitions {
-		up [(temperature > 100) or {exp(mtbf)}] -(0.4)-> down / true;
-		down [{exp(mttr)}] --> up / false;
+		up [(sigA > 70) or {exp(50000000)}] --> down / true;
+		down [{exp(3000)}] --> up / false;
+	}
+}
+component simpleC2 {
+	states: up, down;
+	outport: failure {true, false};
+	transitions {
+		up [(sigB > 3.99) or {exp(50000000)}] --> down / true;
+		down [{exp(3000)}] --> up / false;
+	}
+}
+
+component simpleC3 {
+	states: up, down;
+	outport: failure {true, false};
+	transitions {
+		up [(sigC > 85) or {exp(35000000)}] --> down / true;
+		down [{exp(3000)}] --> up / false;
 	}
 }
 
 component middle {
-	states: up, down;
-	outport: failure {true, false};
+	states: up, down, failing;
+	outport: failure {true, false, neutral};
+	inports {
+		input1 {true, false};
+		input2 {true, false};
+	}
 	transitions {
-		up [(temperature > 100) or {exp(mtbf)}] -(0.4)-> down / true;
-		down [{exp(mttr)}] --> up / false;
+		up [((input1==true ) and (input2==true)) or {exp(10000000)}] --> down / true;
+		up [((input1==true ) or (input2==true))}] --> failing / neutral;
+		down [((input1==false ) and (input2==false)) or {exp(3000)}] --> up / false;
+		down [((input1==false ) or (input2==false)) ] --> failing / neutral;
+		failing [((input1==false ) or (input2==false)) ] --> up / neutral;
+		failing [((input1==true ) or (input2==true)) ] --> down / true;
+
+
+
 	}
 }
 
 component top {
 	states: up, down;
 	outport: failure {true, false};
+	inports {
+		input1 {true, false};
+		input2 {true, false};
+		input3 {true,false};
+	}
 	transitions {
-		up [(temperature > 100) or {exp(mtbf)}] -(0.4)-> down / true;
-		down [{exp(mttr)}] --> up / false;
+		up [ ((input1==true ) or (input2==true) or (input2==true))] --> down / true;
+		down [((input1==true ) and (input2==true) and (input2==true))] --> up / false;
 	}
 }
 
 
 model poc {
 	dynamics: sigA, sigB, sigC;
-	C10 simple;
-	C11 simple;
-	C20 simple;
-	C21 simple;
-	C30 simple;
-	C31 simple;
+	C10 simpleC1;
+	C11 simpleC1;
+	C20 simpleC2;
+	C21 simpleC2;
+	C30 simpleC3;
+	C31 simpleC3;
 	C1s middle;
 	C2s middle;
 	C3s middle;
 	TOP top;
 
-
-
-
-	E1.failure --> top.input1;
-	E2.failure --> top.input2;
-	cost {
-		top == up: 0;
-		top == failing: cost_of_an_engine;
-		top == down: cost_of_an_engine_max;
-	}	
+	C1s.failure --> top.input1;
+	C2s.failure --> top.input2;
+	C3s.failure --> top.input3;
+	C10.failure --> C1s.input1;
+	C11.failure --> C1s.input2;
+	C20.failure --> C2s.input1;
+	C21.failure --> C2s.input2;
+	C30.failure --> C3s.input1;
+	C31.failure --> C3s.input2;
 }
