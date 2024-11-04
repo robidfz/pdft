@@ -1,17 +1,20 @@
-from src.pdftml import just_parse
+import sys
+
+from src.pdft.errors import PdftError
+from src.pdft.parsers import PdftParser
+from src.pdft.validators import PdftValidator
 from src.utils import get_content
 
-grammar_filename = 'grammars/pdft.lark'
-
-examples = {
-    'dynamics': 'examples/dynamics.pdftml',
-    'component': 'examples/components.pdftml',
-    'full': 'examples/full.pdftml'
-}
-
 if __name__ == '__main__':
-    grammar = get_content(grammar_filename)
-    for example_name in examples.keys():
-        example = get_content(examples[example_name])
-        result = just_parse(grammar,example)
-        print(example_name + ' -> ' + str(result) + '\n')
+    if len(sys.argv) > 2:
+        grammar_filename = sys.argv[1]
+        model_filename = sys.argv[2]
+        grammar: str = get_content(grammar_filename)
+        parser: PdftParser = PdftParser(grammar)
+        example = get_content(model_filename)
+        tree = parser.parse(example)
+        validator: PdftValidator = PdftValidator()
+        validator.visit(tree)
+        validator.pprint()
+        error: PdftError = validator.validate()
+        print(error)

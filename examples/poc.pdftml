@@ -1,0 +1,65 @@
+dynamics {
+	sigA, sigB, sigC
+}
+
+
+
+
+
+
+
+
+
+
+component simple {
+	states: up, down;
+	outport: failure {true, false};
+	transitions {
+		up [(temperature > 100) or {exp(mtbf)}] -(0.4)-> down / true;
+		down [{exp(mttr)}] --> up / false;
+	}
+}
+
+component middle {
+	states: up, down;
+	outport: failure {true, false};
+	transitions {
+		up [(temperature > 100) or {exp(mtbf)}] -(0.4)-> down / true;
+		down [{exp(mttr)}] --> up / false;
+	}
+}
+
+component top {
+	states: up, down;
+	outport: failure {true, false};
+	transitions {
+		up [(temperature > 100) or {exp(mtbf)}] -(0.4)-> down / true;
+		down [{exp(mttr)}] --> up / false;
+	}
+}
+
+
+model poc {
+	dynamics: sigA, sigB, sigC;
+	C10 simple;
+	C11 simple;
+	C20 simple;
+	C21 simple;
+	C30 simple;
+	C31 simple;
+	C1s middle;
+	C2s middle;
+	C3s middle;
+	TOP top;
+
+
+
+
+	E1.failure --> top.input1;
+	E2.failure --> top.input2;
+	cost {
+		top == up: 0;
+		top == failing: cost_of_an_engine;
+		top == down: cost_of_an_engine_max;
+	}	
+}
