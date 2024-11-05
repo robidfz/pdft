@@ -42,9 +42,6 @@ component middle {
 		down [((input1==false ) or (input2==false)) ] --> failing / neutral;
 		failing [((input1==false ) or (input2==false)) ] --> up / neutral;
 		failing [((input1==true ) or (input2==true)) ] --> down / true;
-
-
-
 	}
 }
 
@@ -75,7 +72,6 @@ model poc {
 	C2s middle;
 	C3s middle;
 	TOP top;
-
 	C1s.failure --> top.input1;
 	C2s.failure --> top.input2;
 	C3s.failure --> top.input3;
